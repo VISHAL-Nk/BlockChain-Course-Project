@@ -1,0 +1,12 @@
+{
+  "name": "TechFest 2025 — General Admission",
+  "description": "Official entry ticket for TechFest 2025 at City Convention Center.",
+  "image": "ipfs://bafybeibnsmbscxijolg6yvz7pst43blpnqdsj4ebyohjl4fjacwpdchedm/ticket.png",
+  "attributes": [
+    { "trait_type": "Event",    "value": "TechFest 2025" },
+    { "trait_type": "Date",     "value": "2025-12-15" },
+    { "trait_type": "Venue",    "value": "City Convention Center" },
+    { "trait_type": "Category", "value": "General Admission" },
+    { "trait_type": "EventID",  "value": "0" }
+  ]
+}
