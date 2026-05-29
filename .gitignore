@@ -1,8 +1,6 @@
-Notes/
 .deps/
 .states/
 artifacts/
-Notes/
 node_modules/
 cache/
 .env
