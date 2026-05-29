@@ -3,3 +3,6 @@ Notes/
 .states/
 artifacts/
 Notes/
+node_modules/
+cache/
+.env
