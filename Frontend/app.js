@@ -8,6 +8,7 @@ let signer = null;
 let contract = null;
 let currentAccount = null;
 let isOwner = false;
+let isVerifier = false;
 
 // Cached data
 let allTokenIds = [];    // All token IDs from Transfer events
@@ -49,6 +50,7 @@ async function connectWallet() {
 
     // Check if user is the contract owner
     await checkOwnerStatus();
+    await checkVerifierStatus();
 
     // Show main content, hide connect prompt
     document.getElementById('connect-prompt').style.display = 'none';
@@ -73,6 +75,7 @@ function disconnectWallet() {
   contract = null;
   currentAccount = null;
   isOwner = false;
+  isVerifier = false;
   allTokenIds = [];
   totalEventsCount = 0;
 
@@ -124,6 +127,32 @@ async function checkOwnerStatus() {
   }
 }
 
+/**
+ * Check if the connected wallet is a gate verifier.
+ */
+async function checkVerifierStatus() {
+  try {
+    isVerifier = await contract.verifiers(currentAccount);
+    
+    // Toggle scanner UI
+    const scannerCard = document.getElementById('qr-scanner-card');
+    const notVerifierMsg = document.getElementById('not-verifier-msg');
+    
+    if (scannerCard && notVerifierMsg) {
+      if (isVerifier) {
+        scannerCard.style.display = 'block';
+        notVerifierMsg.style.display = 'none';
+      } else {
+        scannerCard.style.display = 'none';
+        notVerifierMsg.style.display = 'block';
+      }
+    }
+  } catch (err) {
+    console.error('Error checking verifier status:', err);
+    isVerifier = false;
+  }
+}
+
 // Listen for account/chain changes
 if (typeof window.ethereum !== 'undefined') {
   window.ethereum.on('accountsChanged', async (accounts) => {
@@ -135,6 +164,7 @@ if (typeof window.ethereum !== 'undefined') {
       contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
       await updateWalletUI();
       await checkOwnerStatus();
+      await checkVerifierStatus();
       await loadAllData();
       showToast('Account changed to ' + truncateAddress(currentAccount), 'info');
     }
@@ -279,25 +309,26 @@ function createEventCard(ev) {
   }
 
   const priceEth = ethers.formatEther(ev.priceWei);
+  const soldPercent = ev.maxTickets > 0 ? Math.round((ev.ticketsSold / ev.maxTickets) * 100) : 0;
 
   card.innerHTML = `
     <div class="card-header">
       <div class="card-title">${escapeHtml(ev.name)}</div>
       <span class="badge ${badgeClass}">${badgeText}</span>
     </div>
+    <div class="card-price">${priceEth} ETH</div>
     <div class="card-detail">
-      <span class="card-detail-label">Price:</span>
-      <span>${priceEth} ETH</span>
-    </div>
-    <div class="card-detail">
-      <span class="card-detail-label">Tickets:</span>
+      <span class="card-detail-label">Tickets</span>
       <span>${ev.ticketsSold} / ${ev.maxTickets} sold</span>
+    </div>
+    <div class="progress-bar-wrapper">
+      <div class="progress-bar" style="width: ${soldPercent}%"></div>
     </div>
     <div class="card-actions">
       <button class="btn btn-primary" 
         onclick="purchaseTicket(${ev.id})" 
         ${(!ev.isActive || isSoldOut) ? 'disabled' : ''}>
-        Buy Ticket
+        🎫 Buy Ticket
       </button>
     </div>
   `;
@@ -831,6 +862,11 @@ let verifyWalletAddress = null;
  * Start the camera-based QR code scanner.
  */
 function startScanner() {
+  if (!isVerifier) {
+    showToast('Only verified gate verifiers can use the scanner.', 'error');
+    return;
+  }
+
   if (!html5QrCode) {
     html5QrCode = new Html5Qrcode('qr-reader');
   }
@@ -885,6 +921,11 @@ function stopScanner() {
  * Start the 3-step secure verification flow.
  */
 async function startVerificationFlow() {
+  if (!isVerifier) {
+    showToast('Only verified gate verifiers can start verification.', 'error');
+    return;
+  }
+
   verifyTokenId = document.getElementById('verify-token-id').value.trim();
   verifyWalletAddress = document.getElementById('verify-wallet').value.trim();
 

@@ -21,7 +21,7 @@ contract TicketNFT is ERC721, Ownable, ReentrancyGuard {
     mapping(uint256 => bool)    public usedTickets;
     mapping(uint256 => uint256) public ticketEvent;
     mapping(uint256 => uint256) public ticketResalePrice;
-    mapping(address => bool)    private verifiers;
+    mapping(address => bool)    public verifiers;
 
     uint256 private _eventCounter;
     uint256 private _tokenCounter;

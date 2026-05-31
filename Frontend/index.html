@@ -5,10 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TicketNFT — Concert Ticketing</title>
   <meta name="description" content="Decentralized concert ticketing platform powered by NFTs">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- ========== Background Decoration ========== -->
+  <div class="bg-decoration" aria-hidden="true">
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+  </div>
 
   <!-- ========== Header ========== -->
   <header class="header">
@@ -19,40 +26,83 @@
       </a>
       <div class="wallet-section">
         <div class="wallet-info" id="wallet-info" style="display: none;">
+          <div class="wallet-dot"></div>
           <span id="wallet-address"></span>
+          <span class="wallet-divider">|</span>
           <span class="wallet-balance" id="wallet-balance"></span>
         </div>
-        <button class="btn btn-connect" id="btn-connect" onclick="connectWallet()">Connect Wallet</button>
+        <button class="btn btn-connect" id="btn-connect" onclick="connectWallet()">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="flex-shrink:0"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M8 4v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Connect Wallet
+        </button>
         <button class="btn btn-disconnect" id="btn-disconnect" onclick="disconnectWallet()" style="display: none;">Disconnect</button>
       </div>
     </div>
   </header>
 
   <!-- ========== Navigation Tabs ========== -->
-  <div class="container">
-    <nav class="nav-tabs" id="nav-tabs">
-      <button class="nav-tab active" data-section="browse-events" onclick="switchTab('browse-events')">Browse Events</button>
-      <button class="nav-tab" data-section="my-tickets" onclick="switchTab('my-tickets')">My Tickets</button>
-      <button class="nav-tab" data-section="resale-market" onclick="switchTab('resale-market')">Resale Market</button>
-      <button class="nav-tab" data-section="organizer" id="tab-organizer" onclick="switchTab('organizer')" style="display: none;">Organizer</button>
-      <button class="nav-tab" data-section="gate-verifier" id="tab-verifier" onclick="switchTab('gate-verifier')">Gate Verifier</button>
-    </nav>
+  <div class="nav-wrapper">
+    <div class="container">
+      <nav class="nav-tabs" id="nav-tabs">
+        <button class="nav-tab active" data-section="browse-events" onclick="switchTab('browse-events')">
+          <span class="nav-tab-icon">🎵</span> Browse Events
+        </button>
+        <button class="nav-tab" data-section="my-tickets" onclick="switchTab('my-tickets')">
+          <span class="nav-tab-icon">🎟️</span> My Tickets
+        </button>
+        <button class="nav-tab" data-section="resale-market" onclick="switchTab('resale-market')">
+          <span class="nav-tab-icon">🏷️</span> Resale Market
+        </button>
+        <button class="nav-tab" data-section="organizer" id="tab-organizer" onclick="switchTab('organizer')" style="display: none;">
+          <span class="nav-tab-icon">⚙️</span> Organizer
+        </button>
+        <button class="nav-tab" data-section="gate-verifier" id="tab-verifier" onclick="switchTab('gate-verifier')">
+          <span class="nav-tab-icon">🔐</span> Gate Verifier
+        </button>
+      </nav>
+    </div>
   </div>
 
   <!-- ========== Main Content ========== -->
-  <main class="container">
+  <main class="container main-content">
 
     <!-- ===== Connect Prompt (shown when wallet not connected) ===== -->
     <div class="connect-prompt" id="connect-prompt">
-      <h2>Welcome to TicketNFT</h2>
-      <p>Connect your MetaMask wallet to browse events, purchase tickets, and more.</p>
-      <button class="btn btn-primary btn-lg" onclick="connectWallet()">🦊 Connect MetaMask</button>
+      <div class="hero-card">
+        <div class="hero-glow"></div>
+        <div class="hero-content">
+          <div class="hero-badge">Powered by Ethereum</div>
+          <h2>Welcome to <span class="text-gradient">TicketNFT</span></h2>
+          <p>Your decentralized gateway to event ticketing. Browse events, purchase NFT tickets, and trade on the resale marketplace — all on-chain.</p>
+          <button class="btn btn-hero" onclick="connectWallet()">
+            🦊 Connect MetaMask
+          </button>
+          <div class="hero-features">
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🔒</div>
+              <span>Secure & Trustless</span>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">💎</div>
+              <span>NFT Tickets</span>
+            </div>
+            <div class="hero-feature">
+              <div class="hero-feature-icon">🔄</div>
+              <span>Fair Resale</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ===== Section: Browse Events ===== -->
     <section class="section" id="section-browse-events">
-      <h1 class="section-title">Browse Events</h1>
-      <p class="section-subtitle">Discover upcoming events and purchase tickets as NFTs.</p>
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Browse Events</h1>
+          <p class="section-subtitle">Discover upcoming events and purchase tickets as NFTs.</p>
+        </div>
+      </div>
       <div class="card-grid" id="events-grid">
         <div class="empty-state" id="events-empty">
           <div class="empty-state-icon">🎵</div>
@@ -64,8 +114,12 @@
 
     <!-- ===== Section: My Tickets ===== -->
     <section class="section" id="section-my-tickets">
-      <h1 class="section-title">My Tickets</h1>
-      <p class="section-subtitle">Manage your purchased ticket NFTs.</p>
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">My Tickets</h1>
+          <p class="section-subtitle">Manage your purchased ticket NFTs.</p>
+        </div>
+      </div>
       <div class="card-grid" id="tickets-grid">
         <div class="empty-state" id="tickets-empty">
           <div class="empty-state-icon">🎟️</div>
@@ -77,8 +131,12 @@
 
     <!-- ===== Section: Resale Marketplace ===== -->
     <section class="section" id="section-resale-market">
-      <h1 class="section-title">Resale Marketplace</h1>
-      <p class="section-subtitle">Browse tickets listed for resale by other users.</p>
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Resale Marketplace</h1>
+          <p class="section-subtitle">Browse tickets listed for resale by other users.</p>
+        </div>
+      </div>
       <div class="card-grid" id="resale-grid">
         <div class="empty-state" id="resale-empty">
           <div class="empty-state-icon">🏷️</div>
@@ -90,8 +148,12 @@
 
     <!-- ===== Section: Organizer Dashboard ===== -->
     <section class="section" id="section-organizer">
-      <h1 class="section-title">Organizer Dashboard</h1>
-      <p class="section-subtitle">Create and manage events. Only the contract owner can access this.</p>
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Organizer Dashboard</h1>
+          <p class="section-subtitle">Create and manage events. Only the contract owner can access this.</p>
+        </div>
+      </div>
 
       <!-- Create Event Form -->
       <div class="form-card">
@@ -173,11 +235,21 @@
 
     <!-- ===== Section: Gate Verifier ===== -->
     <section class="section" id="section-gate-verifier">
-      <h1 class="section-title">Gate Verifier</h1>
-      <p class="section-subtitle">Scan ticket QR codes and verify entry at the event gate. Both verifier and ticket holder must confirm.</p>
+      <div class="section-header">
+        <div>
+          <h1 class="section-title">Gate Verifier</h1>
+          <p class="section-subtitle">Scan ticket QR codes and verify entry at the event gate. Both verifier and ticket holder must confirm.</p>
+        </div>
+      </div>
 
       <!-- QR Scanner Card -->
-      <div class="form-card" style="max-width: 700px;">
+      <div id="not-verifier-msg" class="empty-state" style="display: none; padding: 40px; margin-bottom: 20px;">
+        <div class="empty-state-icon">🚫</div>
+        <p class="empty-state-text">Access Denied</p>
+        <p class="empty-state-hint">You must be a verified gate verifier to use the scanner.</p>
+      </div>
+
+      <div class="form-card" id="qr-scanner-card" style="max-width: 700px;">
         <div class="form-card-title">📷 Scan Ticket QR Code</div>
 
         <div id="qr-scanner-container">
